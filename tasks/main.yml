@@ -10,12 +10,28 @@
     url: https://pkg.tarsnap.com/tarsnap-deb-packaging-key.asc
     state: present
     id: "{{ backup__tarsnap_apt_key }}"
+  when: not backup__tarsnap_experimental
+
+- name: Add tarsnap EXPERIMENTAL apt key
+  apt_key:
+    url: https://pkg.tarsnap.com/experimental/tarsnap-EXPERIMENTAL-deb-packaging-key.asc
+    state: present
+    id: "{{ backup__tarsnap_experimental_apt_key }}"
+  when: backup__tarsnap_experimental
 
 - name: Add tarsnap apt repo
   apt_repository:
     repo: "deb http://pkg.tarsnap.com/deb/{{ ansible_distribution_release }} ./"
     filename: tarsnap.list
     state: present
+  when: not backup__tarsnap_experimental
+
+- name: Add tarsnap EXPERIMENTAL apt repo
+  apt_repository:
+    repo: "deb http://pkg.tarsnap.com/experimental/deb/{{ ansible_distribution_release }} ./"
+    filename: tarsnap.list
+    state: present
+  when: backup__tarsnap_experimental
 
 - name: Install tarsnap
   package:
