@@ -58,6 +58,7 @@
     path: "files/{{ ansible_hostname }}.key"
   register: local_key
   ignore_errors: true
+  become: false
 
 - name: Generate tarsnap key and register host
   expect:
